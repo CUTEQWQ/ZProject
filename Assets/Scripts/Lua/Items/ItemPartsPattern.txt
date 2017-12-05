@@ -1,0 +1,46 @@
+require "Assets.Scripts.Lua.Items.Header" --定义了一些常量
+--文件名为注册名
+--物品的属性表
+properties = {
+	Name =					"TestItem4";--物品名
+	Type =					ITEM_PARTS;
+	Damage = 				5.0;
+	Weight = 				1.0; 
+	Mesh = 					"Shell";--物品模型文件名
+	Ammo = 					"Default";--子弹预制体名,
+	Bonus = {
+		{ATTR_MAX_HP, IS_RATIO, 10.0};--{属性，是否是比例，值}
+		{ATTR_MAX_EN, IS_FIXED, 20.0};
+		{ATTR_MELEE_POWER, IS_FIXED, 10.0};
+		{ATTR_RANGE_POWER, IS_FIXED, 10.0};
+		--需要更多的值就按格式加新行
+	};
+	Description = 			"这是一种测试用的弹药，然而没装火药";
+}
+
+--使用时调用，usr为使用者ID
+function OnUse(usr)
+	print("ItemUsed");
+end
+
+function OnUpdate(inter, deltaTime)
+	local c = inter:GetCache();
+	local time = c:LoadValue(1);
+	local count = c:LoadValue(2);
+
+	if (time == nil) then
+		time = 0.0;
+	end
+	if (count == nil) then
+		count = 0;
+	end
+
+	time = time + deltaTime;
+	if (time > 1.0) then
+		time = 0.0
+		count = count + 1;
+		print("parts, "..count.."s");
+		c:StoreValue(2, count);
+	end
+	c:StoreValue(1, time);
+end
